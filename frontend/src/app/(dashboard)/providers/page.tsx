@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import { apiClient } from "@/lib/api/client";
+import { apiClient, getApiErrorMessage } from "@/lib/api/client";
+import { authHeaders } from "@/lib/auth/token";
 
 type Provider = {
   id: string;
@@ -15,12 +16,19 @@ export default function ProvidersPage() {
   const [providers, setProviders] = useState<Provider[]>([]);
 
   useEffect(() => {
-    apiClient
-      .get<Provider[]>("/providers", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token") || ""}` },
-      })
-      .then((res) => setProviders(res.data))
-      .catch(() => setProviders([]));
+    const loadProviders = async () => {
+      try {
+        const response = await apiClient.get<Provider[]>("/providers", {
+          headers: await authHeaders(),
+        });
+        setProviders(response.data);
+      } catch (err) {
+        console.error(getApiErrorMessage(err));
+        setProviders([]);
+      }
+    };
+
+    void loadProviders();
   }, []);
 
   return (

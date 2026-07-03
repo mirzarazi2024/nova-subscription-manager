@@ -2,7 +2,8 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
-import { apiClient } from "@/lib/api/client";
+import { apiClient, getApiErrorMessage } from "@/lib/api/client";
+import { authHeaders } from "@/lib/auth/token";
 
 type PanelType = "hiddify" | "marzban" | "3x-ui" | "xray";
 
@@ -49,20 +50,18 @@ export default function PanelsPage() {
   const [panelTypeForForm, setPanelTypeForForm] = useState<PanelType>("hiddify");
   const [panelTypeForTest, setPanelTypeForTest] = useState<PanelType>("hiddify");
 
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
-
   const formDefaults = useMemo(() => defaultsByType[panelTypeForForm], [panelTypeForForm]);
   const testDefaults = useMemo(() => defaultsByType[panelTypeForTest], [panelTypeForTest]);
 
   const loadPanels = async () => {
     try {
       const res = await apiClient.get<Panel[]>("/panels", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: await authHeaders(),
       });
       setPanels(res.data);
       setError("");
-    } catch {
-      setError("Failed to load panels");
+    } catch (err) {
+      setError(`Failed to load panels: ${getApiErrorMessage(err)}`);
     }
   };
 
@@ -89,24 +88,24 @@ export default function PanelsPage() {
           proxy_path: String(fd.get("proxy_path") || ""),
           test_endpoint: String(fd.get("test_endpoint") || ""),
         },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { headers: await authHeaders() },
       );
       event.currentTarget.reset();
       setPanelTypeForForm("hiddify");
       await loadPanels();
-    } catch {
-      setError("Failed to create panel");
+    } catch (err) {
+      setError(`Failed to create panel: ${getApiErrorMessage(err)}`);
     }
   };
 
   const onDelete = async (name: string) => {
     try {
       await apiClient.delete(`/panels/${name}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: await authHeaders(),
       });
       await loadPanels();
-    } catch {
-      setError("Failed to delete panel");
+    } catch (err) {
+      setError(`Failed to delete panel: ${getApiErrorMessage(err)}`);
     }
   };
 
@@ -127,12 +126,12 @@ export default function PanelsPage() {
           proxy_path: String(fd.get("proxy_path") || ""),
           test_endpoint: String(fd.get("test_endpoint") || ""),
         },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { headers: await authHeaders() },
       );
       setTestResult(response.data);
       setError("");
-    } catch {
-      setError("Connection test failed");
+    } catch (err) {
+      setError(`Connection test failed: ${getApiErrorMessage(err)}`);
     }
   };
 
@@ -150,12 +149,12 @@ export default function PanelsPage() {
           verify_ssl: fd.get("verify_ssl") === "on",
           proxy_path: String(fd.get("proxy_path") || ""),
         },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { headers: await authHeaders() },
       );
       setAutoDetectResult(response.data);
       setError("");
-    } catch {
-      setError("Auto-detect failed");
+    } catch (err) {
+      setError(`Auto-detect failed: ${getApiErrorMessage(err)}`);
     }
   };
 
@@ -163,6 +162,9 @@ export default function PanelsPage() {
     <div>
       <h2 className="mb-4 text-2xl font-semibold">Panels</h2>
       <p className="mb-4 text-sm text-slate-400">پنل‌ها قابل انتخاب هستند و هدر/API هر پنل قابل تنظیم است.</p>
+      <div className="mb-6 rounded border border-blue-500/30 bg-blue-500/10 p-4 text-sm text-blue-100">
+        برای Hiddify مقدار <b>Proxy Path for Admins</b> را در proxy_path بزن، نه Proxy Path for Clients. Header باید <code>Hiddify-API-Key</code> و prefix خالی باشد.
+      </div>
 
       <form onSubmit={onCreate} className="mb-6 grid grid-cols-1 gap-3 rounded border border-slate-800 p-4 md:grid-cols-2">
         <input name="name" placeholder="Panel name" className="rounded bg-slate-900 p-2" required />

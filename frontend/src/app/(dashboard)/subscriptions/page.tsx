@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 
 import { apiClient } from "@/lib/api/client";
+import { authHeaders } from "@/lib/auth/token";
 
 type Preview = {
   hiddify_nodes: number;
@@ -27,7 +28,7 @@ export default function SubscriptionsPage() {
     const response = await apiClient.post<Preview>(
       "/subscriptions/preview",
       { user_id: userId, provider_ids: providerIds },
-      { headers: { Authorization: `Bearer ${localStorage.getItem("token") || ""}` } },
+      { headers: await authHeaders() },
     );
     setPreview(response.data);
   };

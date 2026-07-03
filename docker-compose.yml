@@ -23,26 +23,25 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    env_file:
+      - ./backend/.env
     environment:
       APP_ENV: production
       POSTGRES_DSN: postgresql+asyncpg://nsm:nsm@postgres:5432/nsm
       REDIS_DSN: redis://redis:6379/0
-      SECRET_KEY: ${SECRET_KEY:-change-me}
-      HIDDIFY_API_URL: ${HIDDIFY_API_URL:-http://hiddify:9000}
-      HIDDIFY_API_KEY: ${HIDDIFY_API_KEY:-}
-      CORS_ORIGINS: '["http://localhost:3000"]'
+      PANEL_CONFIG_PATH: config/panels.json
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_started
+    volumes:
+      - ./backend/config:/app/config
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    environment:
-      NEXT_PUBLIC_API_URL: http://localhost/api/v1
 
   nginx:
     image: nginx:1.27
