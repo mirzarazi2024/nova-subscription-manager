@@ -1,0 +1,28 @@
+{
+  "panels": [
+    {
+      "name": "main-hiddify",
+      "panel_type": "hiddify",
+      "base_url": "https://hiddify.example.com",
+      "api_key": "enc:paste-encrypted-key",
+      "enabled": true,
+      "verify_ssl": true,
+      "api_header_name": "Hiddify-API-Key",
+      "api_prefix": "",
+      "proxy_path": "",
+      "test_endpoint": "/api/v2/admin/user/"
+    },
+    {
+      "name": "main-marzban",
+      "panel_type": "marzban",
+      "base_url": "https://marzban.example.com",
+      "api_key": "enc:paste-encrypted-key",
+      "enabled": false,
+      "verify_ssl": true,
+      "api_header_name": "Authorization",
+      "api_prefix": "Bearer",
+      "proxy_path": "",
+      "test_endpoint": "/api/system"
+    }
+  ]
+}

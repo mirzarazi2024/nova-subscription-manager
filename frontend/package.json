@@ -1,0 +1,28 @@
+{
+  "name": "nsm-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.51.23",
+    "axios": "^1.7.4",
+    "chart.js": "^4.4.4",
+    "lucide-react": "^0.429.0",
+    "next": "15.0.0-rc.0",
+    "react": "19.0.0-rc.0",
+    "react-dom": "19.0.0-rc.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.1.0",
+    "@types/react": "^18.3.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.4"
+  }
+}

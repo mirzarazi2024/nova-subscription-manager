@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "nsm-backend"
+version = "0.1.0"
+description = "NOVA Subscription Manager backend"
+authors = ["NSM Team <team@novavpn.com>"]
+readme = "README.md"
+packages = [{include = "app"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.0"
+uvicorn = {extras = ["standard"], version = "^0.30.0"}
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.32"}
+asyncpg = "^0.29.0"
+alembic = "^1.13.2"
+redis = "^5.0.8"
+pydantic = "^2.8.2"
+pydantic-settings = "^2.4.0"
+httpx = "^0.27.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+cryptography = "^43.0.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+geoip2 = "^4.8.0"
+apscheduler = "^3.10.4"
+orjson = "^3.10.7"
+loguru = "^0.7.2"
+prometheus-fastapi-instrumentator = "^7.0.0"
+python-multipart = "^0.0.9"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.2"
+pytest-asyncio = "^0.23.8"
+ruff = "^0.5.7"
+black = "^24.8.0"
+mypy = "^1.11.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "N", "ASYNC"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true

@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+.next/
+out/
+
+# IDE
+.vscode/
+.idea/
+
+# Build
+*.log
+dist/
+build/
+
+# OS
+.DS_Store
+
+# NSM secrets
+backend/config/panels.json
+
+# Uploaded task artifacts
+019f2727-394f-7d23-86a4-dcc2da1ea05d/
+uploaded_files/

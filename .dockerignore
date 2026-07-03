@@ -1,0 +1,14 @@
+.git
+.github
+**/__pycache__
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+**/node_modules
+**/.next
+.env
+.env.*
+!*.example
+backend/config/panels.json
+uploaded_files
+019f2727-394f-7d23-86a4-dcc2da1ea05d
