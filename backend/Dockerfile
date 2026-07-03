@@ -8,7 +8,8 @@ WORKDIR /app
 RUN pip install --no-cache-dir poetry==1.8.3
 
 COPY pyproject.toml README.md ./
-RUN poetry config virtualenvs.create false && poetry install --only main --no-interaction --no-ansi
+RUN poetry config virtualenvs.create false \
+    && poetry install --only main --no-root --no-interaction --no-ansi
 
 COPY app ./app
 COPY alembic ./alembic
