@@ -186,7 +186,9 @@ class Backup(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     storage_url: Mapped[str] = mapped_column(String(1024))
     checksum: Mapped[str] = mapped_column(String(128))
     status: Mapped[str] = mapped_column(String(32), default="created")
-    metadata: Mapped[dict] = mapped_column(JSON, default=dict)
+    # SQLAlchemy Declarative reserves the attribute name `metadata`.
+    # Keep the database column name as `metadata`, but expose it as `metadata_` in Python.
+    metadata_: Mapped[dict] = mapped_column("metadata", JSON, default=dict)
 
 
 class AuditLog(Base, UUIDPrimaryKeyMixin):
