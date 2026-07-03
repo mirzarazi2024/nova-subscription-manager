@@ -13,6 +13,8 @@ docker compose up --build
 
 > قبل از اجرا، با `make setup-panels` API Key و URL پنل‌ها (خصوصا Hiddify) را از کاربر بگیرید.
 
+For full server installation, see [`INSTALL.md`](INSTALL.md).
+
 ## Hiddify API Profile
 
 For the provided Hiddify OpenAPI schema, configure:
@@ -21,6 +23,7 @@ For the provided Hiddify OpenAPI schema, configure:
 - Prefix: empty
 - Test endpoint: `/api/v2/admin/user/`
 - Optional proxy path: your panel proxy path if present
+- For Hiddify, use **Proxy Path for Admins** in NSM, not **Proxy Path for Clients**.
 
 The Dashboard `Panels` page includes **Test Connection** and **Auto Detect**.
 

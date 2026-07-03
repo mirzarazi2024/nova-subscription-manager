@@ -7,7 +7,7 @@
 
 ### برای تست چه چیزی لازم داری؟
 1. `base_url` پنل هیدیفای (مثلا `https://hiddify.example.com`)
-2. `proxy_path` اگر پنل دارد (مثلا `admin`)
+2. `proxy_path` اگر پنل دارد (برای NSM باید **Proxy Path for Admins** باشد)
 3. `API Key` ادمین
 4. header درست:
    - `api_header_name = Hiddify-API-Key`
@@ -44,3 +44,45 @@ curl -i -H "Hiddify-API-Key: <API_KEY>" \
 2. Firewall/SG اجازه بدهد.
 3. SSL معتبر باشد (یا موقتاً verify_ssl=false برای تست داخلی).
 4. Test Connection در Dashboard باید success بدهد.
+
+---
+
+## کدام Proxy Path را در API وارد کنم؟
+
+در Hiddify دو مقدار جدا می‌بینی:
+
+### 🔐 Proxy Path for Admins
+این را باید در NSM وارد کنی.
+
+NSM برای اتصال به Admin API از مسیرهایی مثل این استفاده می‌کند:
+
+```text
+/{proxy_path}/api/v2/admin/user/
+/{proxy_path}/api/v2/admin/me/
+/{proxy_path}/api/v2/panel/info/
+```
+
+پس اگر `Proxy Path for Admins` برابر `admin-secret` باشد، تست درست این است:
+
+```bash
+curl -i -H "Hiddify-API-Key: <API_KEY>" \
+  "https://<HIDDIFY_HOST>/admin-secret/api/v2/admin/user/"
+```
+
+### 🔏 Proxy Path for Clients
+این را برای اتصال Admin API در NSM وارد نکن.
+
+این مسیر برای لینک‌های سمت کاربر/کلاینت و subscriptionهای client-facing است، نه برای API مدیریت کاربران.
+
+### نتیجه
+در فیلد `proxy_path` داخل NSM بنویس:
+
+```text
+Proxy Path for Admins
+```
+
+نه:
+
+```text
+Proxy Path for Clients
+```
