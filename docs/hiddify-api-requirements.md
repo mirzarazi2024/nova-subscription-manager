@@ -69,6 +69,18 @@ curl -i -H "Hiddify-API-Key: <API_KEY>" \
   "https://<HIDDIFY_HOST>/admin-secret/api/v2/admin/user/"
 ```
 
+اشتباه رایج: آدرس Swagger را برای تست API نزن. این غلط است:
+
+```text
+https://<HIDDIFY_HOST>/<ADMIN_PROXY_PATH>/api/docs#/paths/...
+```
+
+آدرس درست REST API این است:
+
+```text
+https://<HIDDIFY_HOST>/<ADMIN_PROXY_PATH>/api/v2/admin/user/
+```
+
 ### 🔏 Proxy Path for Clients
 این را برای اتصال Admin API در NSM وارد نکن.
 

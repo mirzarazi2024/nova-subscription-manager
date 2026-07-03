@@ -130,6 +130,18 @@ curl -i \
   "https://YOUR_HIDDIFY_DOMAIN/YOUR_ADMIN_PROXY_PATH/api/v2/admin/user/"
 ```
 
+Important: do **not** use the Swagger/docs URL for API calls. This is wrong:
+
+```text
+https://YOUR_HIDDIFY_DOMAIN/YOUR_ADMIN_PROXY_PATH/api/docs#/paths/...
+```
+
+Use the real REST endpoint only:
+
+```text
+https://YOUR_HIDDIFY_DOMAIN/YOUR_ADMIN_PROXY_PATH/api/v2/admin/user/
+```
+
 Without proxy path:
 
 ```bash
@@ -245,3 +257,5 @@ Check Nginx/backend logs:
 docker compose logs -f nginx
 docker compose logs -f backend
 ```
+
+If `docker compose ps` does not show a running `backend` container, the Dashboard cannot save/test anything. Fix backend first, then reload the Dashboard.
