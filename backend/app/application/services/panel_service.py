@@ -58,9 +58,6 @@ class PanelService:
         if len(filtered) == len(data.panels):
             raise ValueError("Panel not found")
 
-        if not any(panel.panel_type == "hiddify" for panel in filtered):
-            raise ValueError("At least one Hiddify panel must remain configured")
-
         save_panel_settings(PanelSettings(panels=filtered))
 
     def _to_read_dto(self, panel: PanelConfig) -> PanelReadDTO:

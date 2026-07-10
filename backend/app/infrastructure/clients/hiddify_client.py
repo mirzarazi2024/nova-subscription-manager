@@ -34,18 +34,35 @@ class HiddifyClient:
             )
             response.raise_for_status()
             data = response.json()
-            return data if isinstance(data, list) else []
+            if isinstance(data, list):
+                return [item for item in data if isinstance(item, dict)]
+            if isinstance(data, dict):
+                for key in ("data", "users", "items", "results"):
+                    value = data.get(key)
+                    if isinstance(value, list):
+                        return [item for item in value if isinstance(item, dict)]
+            return []
 
     async def get_user_subscription(self, user_uuid: str) -> str:
+        """Return the original Hiddify user subscription/config endpoint URL.
+
+        Hiddify's OpenAPI exposes user-by-secret routes as:
+        /{proxy_path}/{secret_uuid}/api/v2/user/all-configs/
+        so we build that URL directly. We also probe the endpoint to ensure it exists,
+        but keep returning the URL even if the response shape is not a JSON object.
+        """
         panel = self._resolve_connection()
+        endpoint = f"/{user_uuid}/api/v2/user/all-configs/"
+        full_path = make_endpoint(panel, endpoint)
         async with httpx.AsyncClient(base_url=str(panel.base_url), timeout=30, verify=panel.verify_ssl) as client:
-            response = await client.get(
-                make_endpoint(panel, f"/api/v2/user/{user_uuid}/all-configs/"),
-                headers=build_auth_headers(panel),
-            )
+            response = await client.get(full_path, headers=build_auth_headers(panel))
+            if response.status_code == 404:
+                fallback = make_endpoint(panel, "/api/v2/user/all-configs/")
+                response = await client.get(fallback, headers=build_auth_headers(panel))
+                response.raise_for_status()
+                return str(client.base_url).rstrip("/") + fallback
             response.raise_for_status()
-            payload = response.json()
-            return str(payload.get("sub_url", ""))
+            return str(client.base_url).rstrip("/") + full_path
 
 
 hiddify_client = HiddifyClient()
